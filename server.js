@@ -10,6 +10,8 @@ const app = express();
 const stripeClient = stripe(STRIPE_API_KEY);
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get("/api/stripe/pk", async (req, res) => {
   res.send(STRIPE_PK);
@@ -25,4 +27,10 @@ app.post("/api/stripe/paymentintent", async (req, res) => {
   res.send(paymentIntent);
 });
 
-app.listen(3000);
+app.post("/api/stripe/paymentreceived", async (req, res) => {
+  const { paymentIntent } = req.body;
+  console.log(paymentIntent);
+  res.sendStatus(200);
+});
+
+app.listen(3001);
